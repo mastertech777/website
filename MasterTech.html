@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Tech - Computer Institute Management</title>
+    <link  rel="icon" type="jpeg" href="MasterTechLogo.jpeg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --sidebar-bg: #0f172a;
+            --sidebar-text: #94a3b8;
+            --sidebar-active: #ffffff;
+            --sidebar-hover: #1e293b;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-glow: rgba(99, 102, 241, 0.35);
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --input-bg: #f8fafc;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.12);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-xs: 6px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --header-height: 64px;
+            --sidebar-width: 260px;
+            --sidebar-collapsed: 72px;
+        }
+        .dark-mode {
+            --bg: #0f172a;
+            --sidebar-bg: #020617;
+            --sidebar-text: #64748b;
+            --sidebar-active: #f1f5f9;
+            --sidebar-hover: #1e293b;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --input-bg: #1e293b;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            transition: background var(--transition), color var(--transition);
+            overflow-x: hidden;
+        }
+
+        /* ============ LOGIN OVERLAY ============ */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .login-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.05);
+        }
+        .login-container {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 36px;
+            width: 420px;
+            max-width: 92vw;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 100px rgba(99, 102, 241, 0.1);
+            text-align: center;
+            animation: loginSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes loginSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .login-logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 8px;
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #fff;
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+            animation: logoPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes logoPulse {
+            0%,
+            100% {
+                box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+            }
+            50% {
+                box-shadow: 0 12px 50px rgba(99, 102, 241, 0.7), 0 0 80px rgba(6, 182, 212, 0.3);
+            }
+        }
+        .login-container h1 {
+            color: #fff;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+        .login-container .login-subtitle {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 28px;
+            letter-spacing: 0.5px;
+        }
+        .login-container .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+        .login-container label {
+            display: block;
+            color: #cbd5e1;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+        .login-container input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: all var(--transition);
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        .login-btn:hover {
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px);
+        }
+        .login-btn:active {
+            transform: scale(0.97);
+        }
+        .login-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .login-btn:hover::after {
+            opacity: 1;
+        }
+        .login-error {
+            color: #f87171;
+            font-size: 12px;
+            margin-top: 8px;
+            min-height: 18px;
+            animation: shake 0.5s ease;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-6px);
+            }
+            75% {
+                transform: translateX(6px);
+            }
+        }
+        .login-footer {
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 20px;
+        }
+        .login-footer span {
+            color: #818cf8;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* ============ SIDEBAR ============ */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: width var(--transition), background var(--transition);
+            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            border-right: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
+        .sidebar-logo {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            min-height: var(--header-height);
+            white-space: nowrap;
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+        }
+        .sidebar-logo .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.35);
+        }
+        .sidebar-logo span {
+            font-weight: 700;
+            font-size: 18px;
+            color: #fff;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #c7d2fe, #a5f3fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+        }
+        .sidebar-nav::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .nav-section {
+            padding: 10px 18px 5px;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #475569;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .sidebar.collapsed .nav-section {
+            display: none;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 16px;
+            margin: 3px 10px;
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            transition: all var(--bounce);
+            white-space: nowrap;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            position: relative;
+        }
+        .nav-item:hover {
+            background: var(--sidebar-hover);
+            color: #e2e8f0;
+            transform: translateX(3px);
+        }
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(6, 182, 212, 0.15));
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            bottom: 8px;
+            width: 3px;
+            border-radius: 0 4px 4px 0;
+            background: linear-gradient(180deg, #6366f1, #06b6d4);
+        }
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .sidebar.collapsed .nav-item span,
+        .sidebar.collapsed .sidebar-logo span {
+            display: none;
+        }
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+            padding: 12px;
+        }
+        .sidebar-toggle {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all var(--transition);
+            z-index: 10;
+        }
+        .sidebar-toggle:hover {
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        /* ============ MAIN ============ */
+        .main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            transition: margin-left var(--transition);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .sidebar.collapsed~.main {
+            margin-left: var(--sidebar-collapsed);
+        }
+        .topbar {
+            height: var(--header-height);
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+            gap: 16px;
+            backdrop-filter: blur(10px);
+        }
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .topbar-left .page-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(6, 182, 212, 0.08));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 16px;
+        }
+        .topbar-left h2 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            background: linear-gradient(135deg, var(--text), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .theme-btn {
+            background: var(--input-bg);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all var(--bounce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .theme-btn:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            transform: rotate(30deg);
+        }
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 25px;
+            transition: all var(--transition);
+            border: 1px solid transparent;
+        }
+        .user-badge:hover {
+            background: var(--input-bg);
+            border-color: var(--border);
+        }
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+        }
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 7px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .logout-btn:hover {
+            background: #fef2f2;
+            color: #ef4444;
+            border-color: #fecaca;
+        }
+        .dark-mode .logout-btn:hover {
+            background: #3b1111;
+            border-color: #7f1d1d;
+        }
+        .content {
+            padding: 24px 28px;
+            flex: 1;
+            overflow-y: auto;
+            animation: fadeSlideIn 0.5s ease;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============ CARDS ============ */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px 20px;
+            box-shadow: var(--shadow);
+            transition: all var(--bounce);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            opacity: 0.06;
+            transition: all var(--bounce);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .stat-card:hover::after {
+            transform: scale(1.8);
+            opacity: 0.12;
+        }
+        .stat-card.blue::after {
+            background: #6366f1;
+        }
+        .stat-card.green::after {
+            background: #10b981;
+        }
+        .stat-card.amber::after {
+            background: #f59e0b;
+        }
+        .stat-card.red::after {
+            background: #ef4444;
+        }
+        .stat-card.purple::after {
+            background: #8b5cf6;
+        }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            transition: all var(--bounce);
+            z-index: 1;
+        }
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1);
+        }
+        .stat-icon.blue {
+            background: #eef2ff;
+            color: #6366f1;
+        }
+        .stat-icon.green {
+            background: #ecfdf5;
+            color: #10b981;
+        }
+        .stat-icon.amber {
+            background: #fffbeb;
+            color: #f59e0b;
+        }
+        .stat-icon.red {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+        .stat-icon.purple {
+            background: #f5f3ff;
+            color: #8b5cf6;
+        }
+        .dark-mode .stat-icon.blue {
+            background: #1e1b4b;
+        }
+        .dark-mode .stat-icon.green {
+            background: #064e3b;
+        }
+        .dark-mode .stat-icon.amber {
+            background: #78350f;
+        }
+        .dark-mode .stat-icon.red {
+            background: #7f1d1d;
+        }
+        .dark-mode .stat-icon.purple {
+            background: #3b1f6e;
+        }
+        .stat-info h3 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            z-index: 1;
+            position: relative;
+        }
+        .stat-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            z-index: 1;
+            position: relative;
+            font-weight: 500;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 18px;
+            transition: all var(--transition);
+            animation: cardAppear 0.5s ease forwards;
+        }
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .card-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .btn {
+            padding: 9px 16px;
+            border-radius: var(--radius-xs);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12.5px;
+            transition: all var(--bounce);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 22px rgba(99, 102, 241, 0.45);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.04);
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 11px;
+            border-radius: 5px;
+        }
+        .btn-success {
+            background: #10b981;
+            color: #fff;
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+        }
+        .btn-info {
+            background: #06b6d4;
+            color: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        table th,
+        table td {
+            padding: 11px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        table th {
+            background: var(--input-bg);
+            font-weight: 700;
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-secondary);
+            position: sticky;
+            top: 0;
+        }
+        table tbody tr {
+            transition: all var(--transition);
+        }
+        table tbody tr:hover {
+            background: var(--input-bg);
+            transform: scale(1.001);
+        }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .dark-mode .badge-success {
+            background: #064e3b;
+            color: #a7f3d0;
+        }
+        .dark-mode .badge-warning {
+            background: #78350f;
+            color: #fcd34d;
+        }
+        .dark-mode .badge-danger {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+        .dark-mode .badge-info {
+            background: #1e3a5f;
+            color: #bfdbfe;
+        }
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-xs);
+            font-size: 13px;
+            background: var(--input-bg);
+            color: var(--text);
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.08);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 11px;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .modal {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 26px 28px;
+            width: 90%;
+            max-width: 620px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--border);
+        }
+        @keyframes modalPop {
+            from {
+                transform: scale(0.9) translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal h3 {
+            margin-bottom: 18px;
+            font-size: 17px;
+            font-weight: 700;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+            animation: fadeSlideIn 0.4s ease;
+        }
+        .chart-container {
+            position: relative;
+            height: 270px;
+            width: 100%;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .search-box {
+            position: relative;
+            max-width: 280px;
+        }
+        .search-box input {
+            padding-left: 38px;
+            border-radius: 22px;
+        }
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            background: var(--input-bg);
+            padding: 4px;
+            border-radius: 22px;
+            display: inline-flex;
+        }
+        .tab-btn {
+            padding: 7px 18px;
+            border: none;
+            background: transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all var(--bounce);
+        }
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--text);
+            box-shadow: var(--shadow);
+        }
+        @media print {
+            .sidebar,
+            .topbar,
+            .btn,
+            .modal-overlay,
+            .no-print,
+            .login-overlay {
+                display: none !important;
+            }
+            .main {
+                margin-left: 0 !important;
+            }
+            .content {
+                padding: 0 !important;
+            }
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: var(--sidebar-collapsed);
+            }
+            .sidebar .nav-item span,
+            .sidebar .sidebar-logo span,
+            .sidebar .nav-section {
+                display: none;
+            }
+            .sidebar .nav-item {
+                justify-content: center;
+                padding: 12px;
+            }
+            .main {
+                margin-left: var(--sidebar-collapsed);
+            }
+            .stat-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* ============ GLOW DOTS BG ============ */
+        .glow-dot {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+            animation: floatDot 8s ease-in-out infinite;
+            filter: blur(40px);
+        }
+        @keyframes floatDot {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            33% {
+                transform: translate(30px, -20px);
+            }
+            66% {
+                transform: translate(-20px, 15px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background glow dots -->
+    <div class="glow-dot" style="width:200px;height:200px;background:#6366f1;top:10%;left:5%;"></div>
+    <div class="glow-dot" style="width:180px;height:180px;background:#06b6d4;bottom:15%;right:8%;animation-delay:-3s;"></div>
+    <div class="glow-dot" style="width:150px;height:150px;background:#8b5cf6;top:50%;left:40%;animation-delay:-6s;"></div>
+
+    <!-- ============ LOGIN OVERLAY ============ -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-container">
+            <div class="login-logo"> <img style="width: 85px; height: 85px; border-radius: 50%;" src="MasterTechLogo.jpeg"></div>
+            <h1>Master Tech</h1>
+            <p class="login-subtitle">Computer Institute Management System</p>
+            <div class="form-group"><label>Username</label><input type="text" id="loginUsername" placeholder="Enter username"
+            autocomplete="off"></div>
+            <div class="form-group"><label>Password</label><input type="password" id="loginPassword"
+            placeholder="Enter password"></div>
+            <div class="login-error" id="loginError"></div>
+            <button class="login-btn" onclick="handleLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+            
+        </div>
+    </div>
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon"><img style="width: 50px; height: 50px; border-radius: 50%;" src="MasterTechLogo.jpeg"></div>
+            <span>Master Tech</span>
+        </div>
+        <nav class="sidebar-nav" id="sidebarNav">
+            <div class="nav-section">Main</div>
+            <a class="nav-item active" data-page="dashboard"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+            <div class="nav-section">Academic</div>
+            <a class="nav-item" data-page="admission"><i class="fas fa-user-plus"></i><span>Student Admission</span></a>
+            <a class="nav-item" data-page="courses"><i class="fas fa-book-open"></i><span>Courses & Batches</span></a>
+            <a class="nav-item" data-page="attendance"><i class="fas fa-clipboard-check"></i><span>Attendance</span></a>
+            <a class="nav-item" data-page="exams"><i class="fas fa-file-alt"></i><span>Exams</span></a>
+            <a class="nav-item" data-page="certificates"><i class="fas fa-certificate"></i><span>Certificates</span></a>
+            <div class="nav-section">Finance</div>
+            <a class="nav-item" data-page="fees"><i class="fas fa-money-bill-wave"></i><span>Fees</span></a>
+            <a class="nav-item" data-page="accounts"><i class="fas fa-calculator"></i><span>Accounts</span></a>
+            <div class="nav-section">Admin</div>
+            <a class="nav-item" data-page="staff"><i class="fas fa-users-cog"></i><span>Staff Management</span></a>
+            <a class="nav-item" data-page="reports"><i class="fas fa-chart-bar"></i><span>Reports</span></a>
+        </nav>
+        <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar"><i class="fas fa-chevron-left"></i></button>
+    </aside>
+
+    <!-- ============ MAIN ============ -->
+    <div class="main" id="mainContent">
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="page-icon" id="pageIcon"><i class="fas fa-th-large"></i></div>
+                <h2 id="pageTitle">Dashboard</h2>
+            </div>
+            <div class="topbar-right">
+                <button class="theme-btn" id="themeToggle" title="Toggle Dark/Light Mode"><i class="fas fa-moon"></i></button>
+                <div class="user-badge" id="userBadge">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <span id="userNameDisplay">Admin</span>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </header>
+        <div class="content" id="contentArea">
+            <!-- All pages same as before but with updated IDs for consistency -->
+            <div class="page active" id="page-dashboard">
+                <div class="stat-cards" id="dashboardStats"></div>
+                <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px;" class="dashboard-grid">
+                    <div class="card"><div class="card-header"><h3>📈 Enrollment Trends (Last 7 Days)</h3></div><div class="chart-container"><canvas id="enrollmentChart"></canvas></div></div>
+                    <div class="card"><div class="card-header"><h3>💰 Fee Collection Overview</h3></div><div class="chart-container"><canvas id="feeChart"></canvas></div></div>
+                    <div class="card" style="grid-column:1/-1;"><div class="card-header"><h3>🆕 Recent Admissions</h3></div><div style="overflow-x:auto;"><table><thead><tr><th>ID</th><th>Name</th><th>Course</th><th>Date</th><th>Status</th></tr></thead><tbody id="recentAdmissionsTable"></tbody></table></div></div>
+                </div>
+            </div>
+            <div class="page" id="page-admission"><div class="card"><div class="card-header"><h3>Student Admissions</h3><button class="btn btn-primary" onclick="openAdmissionModal()"><i class="fas fa-plus"></i> New Admission</button></div><div class="flex-between" style="margin-bottom:12px;"><div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search students..." oninput="renderAdmissionsTable(this.value)"></div></div><div style="overflow-x:auto;"><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Course</th><th>Batch</th><th>Date</th><th>Actions</th></tr></thead><tbody id="admissionsTable"></tbody></table></div></div></div>
+            <div class="page" id="page-courses"><div class="card"><div class="card-header"><h3>Courses & Batches</h3><button class="btn btn-primary" id="courseAddBtn"><i class="fas fa-plus"></i> Add Course</button></div><div class="tabs" id="courseTabs"><button class="tab-btn active" onclick="switchCourseTab('courses')">Courses</button><button class="tab-btn" onclick="switchCourseTab('batches')">Batches</button></div><div id="coursesTabContent" style="overflow-x:auto;"><table><thead><tr><th>ID</th><th>Course Name</th><th>Duration</th><th>Fee (₹)</th><th>Status</th><th>Actions</th></tr></thead><tbody id="coursesTable"></tbody></table></div><div id="batchesTabContent" style="display:none;overflow-x:auto;"><table><thead><tr><th>ID</th><th>Batch Name</th><th>Course</th><th>Timing</th><th>Capacity</th><th>Enrolled</th><th>Actions</th></tr></thead><tbody id="batchesTable"></tbody></table></div></div></div>
+            <div class="page" id="page-attendance"><div class="card"><div class="card-header"><h3>Attendance</h3><button class="btn btn-primary" onclick="openAttendanceModal()"><i class="fas fa-plus"></i> Mark Attendance</button></div><div class="form-grid" style="margin-bottom:14px;"><div class="form-group"><label>Filter Batch</label><select id="attendanceBatchFilter" onchange="renderAttendanceTable()"><option value="">All Batches</option></select></div><div class="form-group"><label>Date</label><input type="date" id="attendanceDateFilter" onchange="renderAttendanceTable()"></div></div><div style="overflow-x:auto;"><table><thead><tr><th>ID</th><th>Student</th><th>Batch</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="attendanceTable"></tbody></table></div></div></div>
+            <div class="page" id="page-exams"><div class="card"><div class="card-header"><h3>Exams</h3><button class="btn btn-primary" onclick="openExamModal()"><i class="fas fa-plus"></i> Schedule Exam</button></div><div style="overflow-x:auto;"><table><thead><tr><th>ID</th><th>Exam Name</th><th>Course</th><th>Date</th><th>Max Marks</th><th>Actions</th></tr></thead><tbody id="examsTable"></tbody></table></div></div><div class="card" id="examResultsCard" style="display:none;"><div class="card-header"><h3>Exam Results</h3></div><div style="overflow-x:auto;"><table><thead><tr><th>Student</th><th>Marks</th><th>Grade</th><th>Status</th></tr></thead><tbody id="examResultsTable"></tbody></table></div></div></div>
+            <div class="page" id="page-certificates"><div class="card"><div class="card-header"><h3>Certificates</h3><button class="btn btn-primary" onclick="openCertificateModal()"><i class="fas fa-plus"></i> Issue Certificate</button></div><div style="overflow-x:auto;"><table><thead><tr><th>ID</th><th>Student</th><th>Course</th><th>Issue Date</th><th>Certificate No</th><th>Actions</th></tr></thead><tbody id="certificatesTable"></tbody></table></div></div></div>
+            <div class="page" id="page-fees"><div class="card"><div class="card-header"><h3>Fee Management</h3><button class="btn btn-primary" onclick="openFeeModal()"><i class="fas fa-plus"></i> Record Payment</button></div><div class="stat-cards" id="feeStats"></div><div style="overflow-x:auto;"><table><thead><tr><th>ID</th><th>Student</th><th>Amount</th><th>Paid</th><th>Balance</th><th>Date</th><th>Receipt</th><th>Actions</th></tr></thead><tbody id="feesTable"></tbody></table></div></div></div>
+            <div class="page" id="page-accounts"><div class="card"><div class="card-header"><h3>Accounts</h3><button class="btn btn-primary" onclick="openAccountModal()"><i class="fas fa-plus"></i> Add Transaction</button></div><div class="stat-cards" id="accountStats"></div><div style="overflow-x:auto;"><table><thead><tr><th>ID</th><th>Type</th><th>Category</th><th>Amount (₹)</th><th>Date</th><th>Description</th><th>Actions</th></tr></thead><tbody id="accountsTable"></tbody></table></div></div></div>
+            <div class="page" id="page-staff"><div class="card"><div class="card-header"><h3>Staff Management</h3><button class="btn btn-primary" onclick="openStaffModal()"><i class="fas fa-plus"></i> Add Staff</button></div><div style="overflow-x:auto;"><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Salary (₹)</th><th>Actions</th></tr></thead><tbody id="staffTable"></tbody></table></div></div></div>
+            <div class="page" id="page-reports"><div class="card"><div class="card-header"><h3>Reports</h3><div style="display:flex;gap:8px;"><button class="btn btn-outline" onclick="exportReport('csv')"><i class="fas fa-file-csv"></i> Export CSV</button><button class="btn btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Print</button></div></div><div class="form-grid" style="margin-bottom:14px;"><div class="form-group"><label>Report Type</label><select id="reportType" onchange="generateReport()"><option value="students">Student Summary</option><option value="fees">Fee Collection</option><option value="attendance">Attendance Summary</option><option value="exams">Exam Results</option><option value="accounts">Account Transactions</option></select></div><div class="form-group"><label>From Date</label><input type="date" id="reportFrom" onchange="generateReport()"></div><div class="form-group"><label>To Date</label><input type="date" id="reportTo" onchange="generateReport()"></div></div><div style="overflow-x:auto;" id="reportTableContainer"><table><thead id="reportTableHead"></thead><tbody id="reportTableBody"></tbody></table></div></div></div>
+        </div>
+    </div>
+    <div id="modalContainer"></div>
+
+    <script>
+        // ==================== AUTH SYSTEM ====================
+        const USERS = {
+            admin: { password: 'admin123', name: 'Administrator', role: 'admin', avatar: 'A' },
+            teacher: { password: 'admin123', name: 'Mr. Rajesh Mehta', role: 'teacher', avatar: 'R' }
+        };
+        let currentUser = null;
+        let isAuthenticated = false;
+
+        function handleLogin() {
+            const username = document.getElementById('loginUsername').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+            if (!username || !password) {
+                errorEl.textContent = '⚠️ Please enter both username and password.';
+                return;
+            }
+            if (USERS[username] && USERS[username].password === password) {
+                currentUser = { username, ...USERS[username] };
+                isAuthenticated = true;
+                errorEl.textContent = '';
+                document.getElementById('loginOverlay').classList.add('hidden');
+                document.getElementById('userNameDisplay').textContent = currentUser.name;
+                document.getElementById('userAvatar').textContent = currentUser.avatar;
+                document.getElementById('pageTitle').textContent = 'Dashboard';
+                document.getElementById('pageIcon').innerHTML = '<i class="fas fa-th-large"></i>';
+                initApp();
+            } else {
+                errorEl.textContent = '❌ Invalid username or password. Try admin/admin123';
+                document.getElementById('loginPassword').value = '';
+                // Re-trigger shake
+                errorEl.style.animation = 'none';
+                errorEl.offsetHeight;
+                errorEl.style.animation = 'shake 0.5s ease';
+            }
+        }
+
+        function handleLogout() {
+            isAuthenticated = false;
+            currentUser = null;
+            document.getElementById('loginOverlay').classList.remove('hidden');
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('userNameDisplay').textContent = 'Guest';
+            document.getElementById('userAvatar').textContent = '?';
+        }
+
+        function fillDemo(type) {
+            document.getElementById('loginUsername').value = type;
+            document.getElementById('loginPassword').value = 'admin123';
+            document.getElementById('loginError').textContent = '';
+        }
+
+        // Enter key login
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !isAuthenticated) {
+                handleLogin();
+            }
+        });
+
+        // ==================== DATA STORE ====================
+        const STORAGE_KEY = 'mastertech_data';
+        let appData = {
+            students: [],
+            courses: [],
+            batches: [],
+            attendance: [],
+            exams: [],
+            examResults: [],
+            certificates: [],
+            fees: [],
+            accounts: [],
+            staff: [],
+            settings: { instituteName: 'Master Tech Computer Institute' }
+        };
+
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) { try { appData = JSON.parse(stored); } catch (e) { seedData(); } } else { seedData(); }
+        }
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+
+        function seedData() {
+            const now = new Date();
+            const fmt = d => d.toISOString().split('T')[0];
+            appData.courses = [
+                { id: 1, name: 'Full Stack Web Development', duration: '6 Months', fee: 45000, status: 'Active' },
+                { id: 2, name: 'Data Science & AI/ML', duration: '8 Months', fee: 60000, status: 'Active' },
+                { id: 3, name: 'Python Programming Mastery', duration: '3 Months', fee: 18000, status: 'Active' },
+                { id: 4, name: 'Digital Marketing Pro', duration: '4 Months', fee: 22000, status: 'Active' },
+                { id: 5, name: 'UI/UX Design Premium', duration: '5 Months', fee: 28000, status: 'Inactive' },
+                { id: 6, name: 'Cybersecurity Essentials', duration: '6 Months', fee: 50000, status: 'Active' }
+            ];
+            appData.batches = [
+                { id: 1, name: 'FSWD-Morning-2024', courseId: 1, timing: '8:00 AM - 10:00 AM', capacity: 30, enrolled: 22 },
+                { id: 2, name: 'FSWD-Evening-2024', courseId: 1, timing: '6:00 PM - 8:00 PM', capacity: 25, enrolled: 18 },
+                { id: 3, name: 'DS-AI-Weekend', courseId: 2, timing: '10:00 AM - 2:00 PM', capacity: 20, enrolled: 15 },
+                { id: 4, name: 'Python-Morning', courseId: 3, timing: '9:00 AM - 11:00 AM', capacity: 35, enrolled: 28 },
+                { id: 5, name: 'CyberSec-Evening', courseId: 6, timing: '5:00 PM - 7:00 PM', capacity: 20, enrolled: 10 }
+            ];
+            appData.students = [
+                { id: 1, name: 'Rahul Sharma', email: 'rahul@email.com', phone: '9876543210', courseId: 1, batchId: 1,
+                    admissionDate: fmt(new Date(now - 30 * 86400000)), status: 'Active' },
+                { id: 2, name: 'Priya Patel', email: 'priya@email.com', phone: '9876543211', courseId: 2, batchId: 3,
+                    admissionDate: fmt(new Date(now - 20 * 86400000)), status: 'Active' },
+                { id: 3, name: 'Amit Kumar', email: 'amit@email.com', phone: '9876543212', courseId: 1, batchId: 2,
+                    admissionDate: fmt(new Date(now - 15 * 86400000)), status: 'Active' },
+                { id: 4, name: 'Sneha Gupta', email: 'sneha@email.com', phone: '9876543213', courseId: 3, batchId: 4,
+                    admissionDate: fmt(new Date(now - 10 * 86400000)), status: 'Active' },
+                { id: 5, name: 'Vikram Singh', email: 'vikram@email.com', phone: '9876543214', courseId: 6, batchId: 5,
+                    admissionDate: fmt(new Date(now - 5 * 86400000)), status: 'Pending' },
+                { id: 6, name: 'Ananya Reddy', email: 'ananya@email.com', phone: '9876543215', courseId: 4, batchId: null,
+                    admissionDate: fmt(new Date(now - 2 * 86400000)), status: 'Active' }
+            ];
+            appData.fees = [
+                { id: 1, studentId: 1, totalAmount: 45000, paidAmount: 25000, balanceAmount: 20000, date: fmt(new Date(now -
+                        25 * 86400000)), receiptNo: 'MT-RCP-001' },
+                { id: 2, studentId: 2, totalAmount: 60000, paidAmount: 60000, balanceAmount: 0, date: fmt(new Date(now - 18 *
+                        86400000)), receiptNo: 'MT-RCP-002' },
+                { id: 3, studentId: 3, totalAmount: 45000, paidAmount: 15000, balanceAmount: 30000, date: fmt(new Date(now -
+                        12 * 86400000)), receiptNo: 'MT-RCP-003' },
+                { id: 4, studentId: 6, totalAmount: 22000, paidAmount: 22000, balanceAmount: 0, date: fmt(new Date(now - 1 *
+                    86400000)), receiptNo: 'MT-RCP-004' }
+            ];
+            appData.attendance = [
+                { id: 1, studentId: 1, batchId: 1, date: fmt(now), status: 'Present' },
+                { id: 2, studentId: 2, batchId: 3, date: fmt(now), status: 'Present' },
+                { id: 3, studentId: 3, batchId: 2, date: fmt(now), status: 'Absent' },
+                { id: 4, studentId: 4, batchId: 4, date: fmt(now), status: 'Present' }
+            ];
+            appData.exams = [
+                { id: 1, name: 'Mid-Term Web Development', courseId: 1, date: fmt(new Date(now + 7 * 86400000)),
+                maxMarks: 100 },
+                { id: 2, name: 'Python Fundamentals Test', courseId: 3, date: fmt(new Date(now + 14 * 86400000)),
+                maxMarks: 50 },
+                { id: 3, name: 'Data Science Quiz', courseId: 2, date: fmt(new Date(now + 10 * 86400000)), maxMarks: 75 }
+            ];
+            appData.examResults = [
+                { id: 1, examId: 1, studentId: 1, marks: 85, grade: 'A', status: 'Pass' },
+                { id: 2, examId: 2, studentId: 4, marks: 42, grade: 'B', status: 'Pass' }
+            ];
+            appData.certificates = [
+                { id: 1, studentId: 2, courseId: 2, issueDate: fmt(new Date(now - 5 * 86400000)),
+                certNo: 'MT-CERT-2024-001' }
+            ];
+            appData.accounts = [
+                { id: 1, type: 'Income', category: 'Course Fees', amount: 25000, date: fmt(new Date(now - 25 * 86400000)),
+                    description: 'Fee from Rahul Sharma' },
+                { id: 2, type: 'Expense', category: 'Salary', amount: 35000, date: fmt(new Date(now - 30 * 86400000)),
+                    description: 'Staff salary - October' },
+                { id: 3, type: 'Income', category: 'Course Fees', amount: 60000, date: fmt(new Date(now - 18 * 86400000)),
+                    description: 'Fee from Priya Patel' },
+                { id: 4, type: 'Expense', category: 'Equipment', amount: 15000, date: fmt(new Date(now - 8 * 86400000)),
+                    description: 'New computers purchase' }
+            ];
+            appData.staff = [
+                { id: 1, name: 'Rajesh Mehta', role: 'Teacher', email: 'rajesh@mastertech.com', phone: '9988776655',
+                    salary: 35000, joinDate: '2024-01-15' },
+                { id: 2, name: 'Sunita Verma', role: 'Teacher', email: 'sunita@mastertech.com', phone: '9988776656',
+                    salary: 32000, joinDate: '2024-03-01' },
+                { id: 3, name: 'Deepak Joshi', role: 'Accountant', email: 'deepak@mastertech.com', phone: '9988776657',
+                    salary: 28000, joinDate: '2024-06-10' },
+                { id: 4, name: 'Anil Kapoor', role: 'Admin', email: 'anil@mastertech.com', phone: '9988776658', salary: 40000,
+                    joinDate: '2024-02-20' }
+            ];
+            saveData();
+        }
+
+        function getStudent(id) { return appData.students.find(s => s.id === id) || {}; }
+
+        function getCourse(id) { return appData.courses.find(c => c.id === id) || {}; }
+
+        function getBatch(id) { return appData.batches.find(b => b.id === id) || {}; }
+
+        function getNextId(arr) { return arr.length > 0 ? Math.max(...arr.map(x => x.id)) + 1 : 1; }
+
+        // ==================== NAVIGATION ====================
+        const pageIcons = {
+            dashboard: 'fa-th-large',
+            admission: 'fa-user-plus',
+            courses: 'fa-book-open',
+            attendance: 'fa-clipboard-check',
+            exams: 'fa-file-alt',
+            certificates: 'fa-certificate',
+            fees: 'fa-money-bill-wave',
+            accounts: 'fa-calculator',
+            staff: 'fa-users-cog',
+            reports: 'fa-chart-bar'
+        };
+
+        function navigateTo(page) {
+            if (!isAuthenticated) return;
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const targetNav = document.querySelector(`.nav-item[data-page="${page}"]`);
+            if (targetNav) targetNav.classList.add('active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const pageEl = document.getElementById('page-' + page);
+            if (pageEl) {
+                pageEl.classList.add('active');
+                pageEl.style.animation = 'none';
+                pageEl.offsetHeight;
+                pageEl.style.animation = 'fadeSlideIn 0.4s ease';
+            }
+            document.getElementById('pageTitle').textContent = targetNav?.querySelector('span')?.textContent ||
+            'Dashboard';
+            document.getElementById('pageIcon').innerHTML = '<i class="fas ' + (pageIcons[page] || 'fa-th-large') +
+                '"></i>';
+            document.getElementById('contentArea').style.animation = 'none';
+            document.getElementById('contentArea').offsetHeight;
+            document.getElementById('contentArea').style.animation = 'fadeSlideIn 0.35s ease';
+            // Render appropriate page
+            const renderMap = {
+                dashboard: renderDashboard,
+                admission: renderAdmissionsTable,
+                courses: () => { renderCoursesTable();
+                    renderBatchesTable();
+                    populateBatchDropdowns(); },
+                attendance: () => { populateBatchDropdowns();
+                    renderAttendanceTable(); },
+                exams: renderExamsTable,
+                certificates: renderCertificatesTable,
+                fees: renderFeesTable,
+                accounts: renderAccountsTable,
+                staff: renderStaffTable,
+                reports: generateReport
+            };
+            if (renderMap[page]) renderMap[page]();
+        }
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                navigateTo(this.dataset.page);
+            });
+        });
+
+        document.getElementById('sidebarToggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        });
+
+        // ==================== THEME ====================
+        const themeToggle = document.getElementById('themeToggle');
+        const savedTheme = localStorage.getItem('mastertech_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('mastertech_theme', isDark ? 'dark' : 'light');
+            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            if (document.getElementById('page-dashboard').classList.contains('active')) renderDashboard();
+        });
+
+        // ==================== DASHBOARD ====================
+        function renderDashboard() {
+            const totalStudents = appData.students.length;
+            const totalCourses = appData.courses.filter(c => c.status === 'Active').length;
+            const totalCollected = appData.fees.reduce((s, f) => s + (f.paidAmount || 0), 0);
+            const totalPending = appData.fees.reduce((s, f) => s + (f.balanceAmount || 0), 0);
+            const totalStaff = appData.staff.length;
+            const totalBatches = appData.batches.length;
+
+            document.getElementById('dashboardStats').innerHTML = `
+            <div class="stat-card blue"><div class="stat-icon blue"><i class="fas fa-user-graduate"></i></div><div class="stat-info"><h3>${totalStudents}</h3><p>Total Students</p></div></div>
+            <div class="stat-card green"><div class="stat-icon green"><i class="fas fa-book-open"></i></div><div class="stat-info"><h3>${totalCourses}</h3><p>Active Courses</p></div></div>
+            <div class="stat-card amber"><div class="stat-icon amber"><i class="fas fa-rupee-sign"></i></div><div class="stat-info"><h3>₹${totalCollected.toLocaleString('en-IN')}</h3><p>Total Collected</p></div></div>
+            <div class="stat-card red"><div class="stat-icon red"><i class="fas fa-clock"></i></div><div class="stat-info"><h3>₹${totalPending.toLocaleString('en-IN')}</h3><p>Pending Fees</p></div></div>
+            <div class="stat-card purple"><div class="stat-icon purple"><i class="fas fa-users-cog"></i></div><div class="stat-info"><h3>${totalStaff}</h3><p>Staff Members</p></div></div>
+            <div class="stat-card blue"><div class="stat-icon blue"><i class="fas fa-layer-group"></i></div><div class="stat-info"><h3>${totalBatches}</h3><p>Active Batches</p></div></div>
+          `;
+            const recent = [...appData.students].sort((a, b) => new Date(b.admissionDate) - new Date(a.admissionDate))
+                .slice(0, 6);
+            document.getElementById('recentAdmissionsTable').innerHTML = recent.map(s => `
+            <tr><td>#MT${String(s.id).padStart(3,'0')}</td><td><strong>${s.name}</strong></td><td>${getCourse(s.courseId).name||'N/A'}</td><td>${s.admissionDate}</td><td><span class="badge badge-${s.status==='Active'?'success':'warning'}">${s.status}</span></td></tr>
+          `).join('') || '<tr><td colspan="5">No admissions yet.</td></tr>';
+            renderCharts();
+        }
+
+        function renderCharts() {
+            const ctx1 = document.getElementById('enrollmentChart');
+            const ctx2 = document.getElementById('feeChart');
+            if (!ctx1 || !ctx2) return;
+            if (ctx1.chartInstance) ctx1.chartInstance.destroy();
+            if (ctx2.chartInstance) ctx2.chartInstance.destroy();
+            const days = [];
+            const enrollData = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                days.push(d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }));
+                enrollData.push(appData.students.filter(s => s.admissionDate === d.toISOString().split('T')[0]).length);
+            }
+            const isDark = document.body.classList.contains('dark-mode');
+            const gridColor = isDark ? '#334155' : '#e2e8f0';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+            ctx1.chartInstance = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: days,
+                    datasets: [{ label: 'New Enrollments', data: enrollData, borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99,102,241,0.08)', fill: true, tension: 0.5, pointRadius: 6,
+                        pointBackgroundColor: '#6366f1', pointBorderColor: '#fff', pointBorderWidth: 2,
+                        pointHoverRadius: 9
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: textColor, usePointStyle: true, padding: 20 } } },
+                    scales: { x: { grid: { color: gridColor }, ticks: { color: textColor } }, y: { grid: { color: gridColor },
+                            ticks: { color: textColor, stepSize: 1 }, beginAtZero: true } }
+                }
+            });
+            const totalCollected = appData.fees.reduce((s, f) => s + (f.paidAmount || 0), 0);
+            const totalPending = appData.fees.reduce((s, f) => s + (f.balanceAmount || 0), 0);
+            ctx2.chartInstance = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Collected', 'Pending'],
+                    datasets: [{ data: [totalCollected || 1, totalPending || 0],
+                        backgroundColor: ['#10b981', '#f59e0b'], borderWidth: 3,
+                        borderColor: isDark ? '#1e293b' : '#fff', hoverBorderWidth: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: textColor, usePointStyle: true,
+                            padding: 16 } } }
+                }
+            });
+        }
+
+        // ==================== ALL CRUD FUNCTIONS (Same logic, updated receipt prefix to MT-) ====================
+        function renderAdmissionsTable(search = '') {
+            const filtered = appData.students.filter(s => s.name.toLowerCase().includes(search.toLowerCase()) || s.email
+                .toLowerCase().includes(search.toLowerCase()));
+            document.getElementById('admissionsTable').innerHTML = filtered.map(s => `
+            <tr><td>#MT${String(s.id).padStart(3,'0')}</td><td><strong>${s.name}</strong></td><td>${s.email}</td><td>${s.phone}</td><td>${getCourse(s.courseId).name||'N/A'}</td><td>${getBatch(s.batchId).name||'N/A'}</td><td>${s.admissionDate}</td>
+            <td><button class="btn btn-sm btn-outline" onclick="editAdmission(${s.id})"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="deleteAdmission(${s.id})"><i class="fas fa-trash"></i></button></td></tr>
+          `).join('') || '<tr><td colspan="8">No students found.</td></tr>';
+        }
+
+        function openAdmissionModal(id = null) {
+            const s = id ? appData.students.find(x => x.id === id) : null;
+            const co = appData.courses.map(c =>
+                `<option value="${c.id}" ${s&&s.courseId===c.id?'selected':''}>${c.name}</option>`).join('');
+            const bo = appData.batches.map(b =>
+                `<option value="${b.id}" ${s&&s.batchId===b.id?'selected':''}>${b.name}</option>`).join('');
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>${s?'Edit':'New'} Admission</h3>
+            <div class="form-grid"><div class="form-group"><label>Full Name</label><input id="admName" value="${s?s.name:''}"></div><div class="form-group"><label>Email</label><input id="admEmail" type="email" value="${s?s.email:''}"></div><div class="form-group"><label>Phone</label><input id="admPhone" value="${s?s.phone:''}"></div><div class="form-group"><label>Course</label><select id="admCourse">${co}</select></div><div class="form-group"><label>Batch</label><select id="admBatch"><option value="">None</option>${bo}</select></div><div class="form-group"><label>Admission Date</label><input type="date" id="admDate" value="${s?s.admissionDate:new Date().toISOString().split('T')[0]}"></div><div class="form-group"><label>Status</label><select id="admStatus"><option value="Active" ${s&&s.status==='Active'?'selected':''}>Active</option><option value="Pending" ${s&&s.status==='Pending'?'selected':''}>Pending</option></select></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveAdmission(${s?s.id:'null'})">Save</button></div></div></div>`;
+        }
+
+        function saveAdmission(id) {
+            const d = { name: document.getElementById('admName').value.trim(), email: document.getElementById('admEmail')
+                    .value.trim(), phone: document.getElementById('admPhone').value.trim(), courseId: parseInt(document
+                        .getElementById('admCourse').value), batchId: document.getElementById('admBatch').value ? parseInt(
+                        document.getElementById('admBatch').value) : null, admissionDate: document.getElementById('admDate')
+                    .value, status: document.getElementById('admStatus').value };
+            if (!d.name || !d.email) { alert('Name and Email required!'); return; }
+            if (id) { const i = appData.students.findIndex(x => x.id === id); if (i >= 0) appData.students[i] = { ...appData
+                        .students[i], ...d }; } else { appData.students.push({ id: getNextId(appData.students), ...d }); }
+            saveData();
+            closeModal();
+            renderAdmissionsTable();
+            if (document.getElementById('page-dashboard').classList.contains('active')) renderDashboard();
+        }
+
+        function editAdmission(id) { openAdmissionModal(id); }
+
+        function deleteAdmission(id) { if (confirm('Delete student?')) { appData.students = appData.students.filter(x => x.id !==
+                    id);
+                saveData();
+                renderAdmissionsTable(); } }
+
+        function renderCoursesTable() {
+            document.getElementById('coursesTable').innerHTML = appData.courses.map(c => `
+            <tr><td>#C${c.id}</td><td><strong>${c.name}</strong></td><td>${c.duration}</td><td>₹${c.fee.toLocaleString('en-IN')}</td><td><span class="badge badge-${c.status==='Active'?'success':'danger'}">${c.status}</span></td><td><button class="btn btn-sm btn-outline" onclick="editCourse(${c.id})"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="deleteCourse(${c.id})"><i class="fas fa-trash"></i></button></td></tr>
+          `).join('') || '<tr><td colspan="6">No courses.</td></tr>';
+        }
+
+        function renderBatchesTable() {
+            document.getElementById('batchesTable').innerHTML = appData.batches.map(b => `
+            <tr><td>#B${b.id}</td><td><strong>${b.name}</strong></td><td>${getCourse(b.courseId).name||'N/A'}</td><td>${b.timing}</td><td>${b.capacity}</td><td>${b.enrolled}</td><td><button class="btn btn-sm btn-outline" onclick="editBatch(${b.id})"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="deleteBatch(${b.id})"><i class="fas fa-trash"></i></button></td></tr>
+          `).join('') || '<tr><td colspan="7">No batches.</td></tr>';
+        }
+
+        function switchCourseTab(tab) {
+            document.querySelectorAll('#courseTabs .tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('coursesTabContent').style.display = tab === 'courses' ? '' : 'none';
+            document.getElementById('batchesTabContent').style.display = tab === 'batches' ? '' : 'none';
+            document.getElementById('courseAddBtn').innerHTML = tab === 'courses' ?
+                '<i class="fas fa-plus"></i> Add Course' : '<i class="fas fa-plus"></i> Add Batch';
+            document.getElementById('courseAddBtn').onclick = tab === 'courses' ? () => openCourseModal() : () =>
+                openBatchModal();
+        }
+
+        function openCourseModal(id = null) {
+            const c = id ? appData.courses.find(x => x.id === id) : null;
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>${c?'Edit':'Add'} Course</h3>
+            <div class="form-grid"><div class="form-group"><label>Course Name</label><input id="cName" value="${c?c.name:''}"></div><div class="form-group"><label>Duration</label><input id="cDuration" value="${c?c.duration:''}"></div><div class="form-group"><label>Fee (₹)</label><input type="number" id="cFee" value="${c?c.fee:''}"></div><div class="form-group"><label>Status</label><select id="cStatus"><option value="Active" ${c&&c.status==='Active'?'selected':''}>Active</option><option value="Inactive" ${c&&c.status==='Inactive'?'selected':''}>Inactive</option></select></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveCourse(${c?c.id:'null'})">Save</button></div></div></div>`;
+        }
+
+        function saveCourse(id) {
+            const d = { name: document.getElementById('cName').value.trim(), duration: document.getElementById('cDuration')
+                    .value.trim(), fee: parseInt(document.getElementById('cFee').value) || 0, status: document.getElementById(
+                        'cStatus').value };
+            if (!d.name) { alert('Course name required!'); return; }
+            if (id) { const i = appData.courses.findIndex(x => x.id === id); if (i >= 0) appData.courses[i] = { ...appData
+                        .courses[i], ...d }; } else { appData.courses.push({ id: getNextId(appData.courses), ...d }); }
+            saveData();
+            closeModal();
+            renderCoursesTable();
+            if (document.getElementById('page-dashboard').classList.contains('active')) renderDashboard();
+        }
+
+        function editCourse(id) { openCourseModal(id); }
+
+        function deleteCourse(id) { if (confirm('Delete course?')) { appData.courses = appData.courses.filter(x => x.id !== id);
+                saveData();
+                renderCoursesTable(); } }
+
+        function openBatchModal(id = null) {
+            const b = id ? appData.batches.find(x => x.id === id) : null;
+            const co = appData.courses.map(c =>
+                `<option value="${c.id}" ${b&&b.courseId===c.id?'selected':''}>${c.name}</option>`).join('');
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>${b?'Edit':'Add'} Batch</h3>
+            <div class="form-grid"><div class="form-group"><label>Batch Name</label><input id="bName" value="${b?b.name:''}"></div><div class="form-group"><label>Course</label><select id="bCourse">${co}</select></div><div class="form-group"><label>Timing</label><input id="bTiming" value="${b?b.timing:''}"></div><div class="form-group"><label>Capacity</label><input type="number" id="bCapacity" value="${b?b.capacity:'30'}"></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveBatch(${b?b.id:'null'})">Save</button></div></div></div>`;
+        }
+
+        function saveBatch(id) {
+            const d = { name: document.getElementById('bName').value.trim(), courseId: parseInt(document.getElementById(
+                    'bCourse').value), timing: document.getElementById('bTiming').value.trim(), capacity: parseInt(document
+                    .getElementById('bCapacity').value) || 30, enrolled: 0 };
+            if (!d.name) { alert('Batch name required!'); return; }
+            if (id) { const i = appData.batches.findIndex(x => x.id === id); if (i >= 0) { d.enrolled = appData.batches[i]
+                        .enrolled;
+                    appData.batches[i] = { ...appData.batches[i], ...d }; } } else { appData.batches.push({ id: getNextId(
+                        appData.batches), ...d }); }
+            saveData();
+            closeModal();
+            renderBatchesTable();
+        }
+
+        function editBatch(id) { openBatchModal(id); }
+
+        function deleteBatch(id) { if (confirm('Delete batch?')) { appData.batches = appData.batches.filter(x => x.id !== id);
+                saveData();
+                renderBatchesTable(); } }
+
+        function populateBatchDropdowns() {
+            const opts = appData.batches.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+            const sel = document.getElementById('attendanceBatchFilter');
+            if (sel) sel.innerHTML = '<option value="">All Batches</option>' + opts;
+        }
+
+        function renderAttendanceTable() {
+            const bf = document.getElementById('attendanceBatchFilter')?.value;
+            const df = document.getElementById('attendanceDateFilter')?.value;
+            let f = [...appData.attendance];
+            if (bf) f = f.filter(a => a.batchId === parseInt(bf));
+            if (df) f = f.filter(a => a.date === df);
+            f.sort((a, b) => new Date(b.date) - new Date(a.date));
+            document.getElementById('attendanceTable').innerHTML = f.map(a => `
+            <tr><td>#A${a.id}</td><td>${getStudent(a.studentId).name||'N/A'}</td><td>${getBatch(a.batchId).name||'N/A'}</td><td>${a.date}</td><td><span class="badge badge-${a.status==='Present'?'success':'danger'}">${a.status}</span></td><td><button class="btn btn-sm btn-danger" onclick="deleteAttendance(${a.id})"><i class="fas fa-trash"></i></button></td></tr>
+          `).join('') || '<tr><td colspan="6">No records.</td></tr>';
+        }
+
+        function openAttendanceModal() {
+            const so = appData.students.map(s =>
+                `<option value="${s.id}">${s.name}</option>`).join('');
+            const bo = appData.batches.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>Mark Attendance</h3>
+            <div class="form-grid"><div class="form-group"><label>Student</label><select id="attStudent">${so}</select></div><div class="form-group"><label>Batch</label><select id="attBatch">${bo}</select></div><div class="form-group"><label>Date</label><input type="date" id="attDate" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-group"><label>Status</label><select id="attStatus"><option value="Present">Present</option><option value="Absent">Absent</option></select></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveAttendance()">Save</button></div></div></div>`;
+        }
+
+        function saveAttendance() {
+            const d = { studentId: parseInt(document.getElementById('attStudent').value), batchId: parseInt(document
+                    .getElementById('attBatch').value), date: document.getElementById('attDate').value, status: document
+                    .getElementById('attStatus').value };
+            appData.attendance.push({ id: getNextId(appData.attendance), ...d });
+            saveData();
+            closeModal();
+            renderAttendanceTable();
+        }
+
+        function deleteAttendance(id) { if (confirm('Delete?')) { appData.attendance = appData.attendance.filter(x => x.id !==
+                    id);
+                saveData();
+                renderAttendanceTable(); } }
+
+        function renderExamsTable() {
+            document.getElementById('examsTable').innerHTML = appData.exams.map(e => `
+            <tr><td>#E${e.id}</td><td><strong>${e.name}</strong></td><td>${getCourse(e.courseId).name||'N/A'}</td><td>${e.date}</td><td>${e.maxMarks}</td><td><button class="btn btn-sm btn-info" onclick="viewExamResults(${e.id})"><i class="fas fa-eye"></i> Results</button> <button class="btn btn-sm btn-danger" onclick="deleteExam(${e.id})"><i class="fas fa-trash"></i></button></td></tr>
+          `).join('') || '<tr><td colspan="6">No exams.</td></tr>';
+        }
+
+        function openExamModal() {
+            const co = appData.courses.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>Schedule Exam</h3>
+            <div class="form-grid"><div class="form-group"><label>Exam Name</label><input id="examName"></div><div class="form-group"><label>Course</label><select id="examCourse">${co}</select></div><div class="form-group"><label>Date</label><input type="date" id="examDate"></div><div class="form-group"><label>Max Marks</label><input type="number" id="examMaxMarks" value="100"></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveExam()">Save</button></div></div></div>`;
+        }
+
+        function saveExam() {
+            const d = { name: document.getElementById('examName').value.trim(), courseId: parseInt(document.getElementById(
+                    'examCourse').value), date: document.getElementById('examDate').value, maxMarks: parseInt(document
+                    .getElementById('examMaxMarks').value) || 100 };
+            if (!d.name || !d.date) { alert('Name and date required!'); return; }
+            appData.exams.push({ id: getNextId(appData.exams), ...d });
+            saveData();
+            closeModal();
+            renderExamsTable();
+        }
+
+        function deleteExam(id) { if (confirm('Delete?')) { appData.exams = appData.exams.filter(x => x.id !== id);
+                appData.examResults = appData.examResults.filter(x => x.examId !== id);
+                saveData();
+                renderExamsTable(); } }
+
+        function viewExamResults(eid) {
+            const exam = appData.exams.find(x => x.id === eid);
+            if (!exam) return;
+            const results = appData.examResults.filter(x => x.examId === eid);
+            document.getElementById('examResultsCard').style.display = '';
+            document.getElementById('examResultsTable').innerHTML = results.map(r => `
+            <tr><td>${getStudent(r.studentId).name||'N/A'}</td><td>${r.marks}/${exam.maxMarks}</td><td>${r.grade}</td><td><span class="badge badge-${r.status==='Pass'?'success':'danger'}">${r.status}</span></td></tr>
+          `).join('') || '<tr><td colspan="4">No results. <button class="btn btn-sm btn-primary" onclick="addExamResult(' +
+                eid + ')">Add Result</button></td></tr>';
+            document.getElementById('examResultsCard').querySelector('h3').textContent = 'Results: ' + exam.name;
+        }
+
+        function addExamResult(eid) {
+            const so = appData.students.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>Add Result</h3>
+            <div class="form-grid"><div class="form-group"><label>Student</label><select id="resStudent">${so}</select></div><div class="form-group"><label>Marks</label><input type="number" id="resMarks"></div><div class="form-group"><label>Grade</label><select id="resGrade"><option>A</option><option>B</option><option>C</option><option>D</option><option>F</option></select></div><div class="form-group"><label>Status</label><select id="resStatus"><option value="Pass">Pass</option><option value="Fail">Fail</option></select></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveExamResult(${eid})">Save</button></div></div></div>`;
+        }
+
+        function saveExamResult(eid) {
+            const d = { examId: eid, studentId: parseInt(document.getElementById('resStudent').value), marks: parseInt(
+                    document.getElementById('resMarks').value) || 0, grade: document.getElementById('resGrade').value,
+                status: document.getElementById('resStatus').value };
+            appData.examResults.push({ id: getNextId(appData.examResults), ...d });
+            saveData();
+            closeModal();
+            viewExamResults(eid);
+        }
+
+        function renderCertificatesTable() {
+            document.getElementById('certificatesTable').innerHTML = appData.certificates.map(c => `
+            <tr><td>#CT${c.id}</td><td>${getStudent(c.studentId).name||'N/A'}</td><td>${getCourse(c.courseId).name||'N/A'}</td><td>${c.issueDate}</td><td>${c.certNo}</td><td><button class="btn btn-sm btn-outline" onclick="printCertificate(${c.id})"><i class="fas fa-print"></i></button> <button class="btn btn-sm btn-danger" onclick="deleteCertificate(${c.id})"><i class="fas fa-trash"></i></button></td></tr>
+          `).join('') || '<tr><td colspan="6">No certificates.</td></tr>';
+        }
+
+        function openCertificateModal() {
+            const so = appData.students.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            const co = appData.courses.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>Issue Certificate</h3>
+            <div class="form-grid"><div class="form-group"><label>Student</label><select id="certStudent">${so}</select></div><div class="form-group"><label>Course</label><select id="certCourse">${co}</select></div><div class="form-group"><label>Issue Date</label><input type="date" id="certDate" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-group"><label>Certificate No</label><input id="certNo" value="MT-CERT-${new Date().getFullYear()}-${String(appData.certificates.length+1).padStart(3,'0')}"></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveCertificate()">Issue</button></div></div></div>`;
+        }
+
+        function saveCertificate() {
+            const d = { studentId: parseInt(document.getElementById('certStudent').value), courseId: parseInt(document
+                    .getElementById('certCourse').value), issueDate: document.getElementById('certDate').value, certNo: document
+                    .getElementById('certNo').value.trim() };
+            if (!d.certNo) { alert('Certificate number required!'); return; }
+            appData.certificates.push({ id: getNextId(appData.certificates), ...d });
+            saveData();
+            closeModal();
+            renderCertificatesTable();
+        }
+
+        function deleteCertificate(id) { if (confirm('Delete?')) { appData.certificates = appData.certificates.filter(x => x.id !==
+                    id);
+                saveData();
+                renderCertificatesTable(); } }
+
+        function printCertificate(id) {
+            const cert = appData.certificates.find(x => x.id === id);
+            if (!cert) return;
+            const st = getStudent(cert.studentId);
+            const co = getCourse(cert.courseId);
+            const w = window.open('', '_blank', 'width=700,height=500');
+            w.document.write(`<html><head><title>Certificate</title><style>body{font-family:'Georgia',serif;text-align:center;padding:40px;border:8px double #6366f1;margin:20px;min-height:400px;}h1{font-size:28px;color:#6366f1;}h2{font-size:22px;}.cert-no{font-size:12px;color:#666;margin-top:30px;}@media print{body{border:8px double #6366f1;}}</style></head><body><h1>CERTIFICATE OF COMPLETION</h1><p>This certifies that</p><h2>${st.name||'Student'}</h2><p>has successfully completed</p><h2>${co.name||'Course'}</h2><p>Issued: ${cert.issueDate}</p><p class="cert-no">${cert.certNo}</p><p style="margin-top:40px;font-style:italic;">Master Tech Computer Institute</p><script>window.onload=function(){window.print();}<`+`/script></body></html>`);
+            w.document.close();
+        }
+
+        function renderFeesTable() {
+            const tc = appData.fees.reduce((s, f) => s + (f.paidAmount || 0), 0);
+            const tp = appData.fees.reduce((s, f) => s + (f.balanceAmount || 0), 0);
+            document.getElementById('feeStats').innerHTML = `
+            <div class="stat-card green"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><div class="stat-info"><h3>₹${tc.toLocaleString('en-IN')}</h3><p>Total Collected</p></div></div>
+            <div class="stat-card red"><div class="stat-icon red"><i class="fas fa-exclamation-circle"></i></div><div class="stat-info"><h3>₹${tp.toLocaleString('en-IN')}</h3><p>Total Pending</p></div></div>`;
+            document.getElementById('feesTable').innerHTML = appData.fees.map(f => `
+            <tr><td>#F${f.id}</td><td>${getStudent(f.studentId).name||'N/A'}</td><td>₹${f.totalAmount.toLocaleString('en-IN')}</td><td>₹${f.paidAmount.toLocaleString('en-IN')}</td><td>₹${f.balanceAmount.toLocaleString('en-IN')}</td><td>${f.date}</td><td><button class="btn btn-sm btn-outline" onclick="printReceipt(${f.id})"><i class="fas fa-print"></i></button></td><td><button class="btn btn-sm btn-danger" onclick="deleteFee(${f.id})"><i class="fas fa-trash"></i></button></td></tr>
+          `).join('') || '<tr><td colspan="8">No records.</td></tr>';
+        }
+
+        function openFeeModal() {
+            const so = appData.students.map(s =>
+                `<option value="${s.id}" data-fee="${getCourse(s.courseId).fee||0}">${s.name} - ${getCourse(s.courseId).name||'N/A'} (₹${getCourse(s.courseId).fee||0})</option>`
+                ).join('');
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>Record Payment</h3>
+            <div class="form-grid"><div class="form-group"><label>Student</label><select id="feeStudent" onchange="updateFeeTotal()">${so}</select></div><div class="form-group"><label>Total Fee (₹)</label><input type="number" id="feeTotal" readonly></div><div class="form-group"><label>Amount Paid (₹)</label><input type="number" id="feePaid" oninput="updateFeeBalance()"></div><div class="form-group"><label>Balance (₹)</label><input type="number" id="feeBalance" readonly></div><div class="form-group"><label>Date</label><input type="date" id="feeDate" value="${new Date().toISOString().split('T')[0]}"></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveFee()">Save</button></div></div></div>`;
+            updateFeeTotal();
+        }
+
+        function updateFeeTotal() {
+            const sel = document.getElementById('feeStudent');
+            const fee = sel?.selectedOptions[0] ? parseInt(sel.selectedOptions[0].dataset.fee) || 0 : 0;
+            const el = document.getElementById('feeTotal');
+            if (el) el.value = fee;
+            updateFeeBalance();
+        }
+
+        function updateFeeBalance() {
+            const t = parseInt(document.getElementById('feeTotal')?.value) || 0;
+            const p = parseInt(document.getElementById('feePaid')?.value) || 0;
+            const el = document.getElementById('feeBalance');
+            if (el) el.value = Math.max(0, t - p);
+        }
+
+        function saveFee() {
+            const d = { studentId: parseInt(document.getElementById('feeStudent').value), totalAmount: parseInt(document
+                    .getElementById('feeTotal').value) || 0, paidAmount: parseInt(document.getElementById('feePaid')
+                    .value) || 0, balanceAmount: parseInt(document.getElementById('feeBalance').value) || 0, date: document
+                    .getElementById('feeDate').value, receiptNo: 'MT-RCP-' + String(appData.fees.length + 1).padStart(3,
+                    '0') };
+            if (d.paidAmount <= 0) { alert('Enter payment amount!'); return; }
+            appData.fees.push({ id: getNextId(appData.fees), ...d });
+            saveData();
+            closeModal();
+            renderFeesTable();
+            if (document.getElementById('page-dashboard').classList.contains('active')) renderDashboard();
+        }
+
+        function deleteFee(id) { if (confirm('Delete?')) { appData.fees = appData.fees.filter(x => x.id !== id);
+                saveData();
+                renderFeesTable(); } }
+
+        function printReceipt(id) {
+            const f = appData.fees.find(x => x.id === id);
+            if (!f) return;
+            const st = getStudent(f.studentId);
+            const co = getCourse(st.courseId);
+            const w = window.open('', '_blank', 'width=400,height=500');
+            w.document.write(`<html><head><title>Receipt</title><style>body{font-family:'Courier New',monospace;padding:20px;max-width:350px;margin:auto;border:2px dashed #333;}h2{text-align:center;}table{width:100%;}td{padding:4px;}.line{border-top:1px dashed #333;margin:8px 0;}@media print{body{border:none;}}</style></head><body><h2>PAYMENT RECEIPT</h2><p style="text-align:center;">Master Tech Computer Institute</p><table><tr><td>Receipt:</td><td><strong>${f.receiptNo}</strong></td></tr><tr><td>Date:</td><td>${f.date}</td></tr><tr><td>Student:</td><td>${st.name||'N/A'}</td></tr><tr><td>Course:</td><td>${co.name||'N/A'}</td></tr></table><div class="line"></div><table><tr><td>Total:</td><td>₹${f.totalAmount.toLocaleString('en-IN')}</td></tr><tr><td>Paid:</td><td><strong>₹${f.paidAmount.toLocaleString('en-IN')}</strong></td></tr><tr><td>Balance:</td><td>₹${f.balanceAmount.toLocaleString('en-IN')}</td></tr></table><div class="line"></div><p style="text-align:center;">Thank you!</p><script>window.onload=function(){window.print();}<`+`/script></body></html>`);
+            w.document.close();
+        }
+
+        function renderAccountsTable() {
+            const ti = appData.accounts.filter(a => a.type === 'Income').reduce((s, a) => s + a.amount, 0);
+            const te = appData.accounts.filter(a => a.type === 'Expense').reduce((s, a) => s + a.amount, 0);
+            document.getElementById('accountStats').innerHTML = `
+            <div class="stat-card green"><div class="stat-icon green"><i class="fas fa-arrow-down"></i></div><div class="stat-info"><h3>₹${ti.toLocaleString('en-IN')}</h3><p>Total Income</p></div></div>
+            <div class="stat-card red"><div class="stat-icon red"><i class="fas fa-arrow-up"></i></div><div class="stat-info"><h3>₹${te.toLocaleString('en-IN')}</h3><p>Total Expense</p></div></div>
+            <div class="stat-card blue"><div class="stat-icon blue"><i class="fas fa-balance-scale"></i></div><div class="stat-info"><h3>₹${(ti-te).toLocaleString('en-IN')}</h3><p>Net Balance</p></div></div>`;
+            document.getElementById('accountsTable').innerHTML = appData.accounts.map(a => `
+            <tr><td>#AC${a.id}</td><td><span class="badge badge-${a.type==='Income'?'success':'danger'}">${a.type}</span></td><td>${a.category}</td><td>₹${a.amount.toLocaleString('en-IN')}</td><td>${a.date}</td><td>${a.description}</td><td><button class="btn btn-sm btn-danger" onclick="deleteAccount(${a.id})"><i class="fas fa-trash"></i></button></td></tr>
+          `).join('') || '<tr><td colspan="7">No transactions.</td></tr>';
+        }
+
+        function openAccountModal() {
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>Add Transaction</h3>
+            <div class="form-grid"><div class="form-group"><label>Type</label><select id="accType"><option value="Income">Income</option><option value="Expense">Expense</option></select></div><div class="form-group"><label>Category</label><input id="accCategory"></div><div class="form-group"><label>Amount (₹)</label><input type="number" id="accAmount"></div><div class="form-group"><label>Date</label><input type="date" id="accDate" value="${new Date().toISOString().split('T')[0]}"></div><div class="form-group" style="grid-column:1/-1;"><label>Description</label><input id="accDesc"></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveAccount()">Save</button></div></div></div>`;
+        }
+
+        function saveAccount() {
+            const d = { type: document.getElementById('accType').value, category: document.getElementById('accCategory')
+                    .value.trim(), amount: parseInt(document.getElementById('accAmount').value) || 0, date: document
+                    .getElementById('accDate').value, description: document.getElementById('accDesc').value.trim() };
+            if (!d.category || d.amount <= 0) { alert('Category and amount required!'); return; }
+            appData.accounts.push({ id: getNextId(appData.accounts), ...d });
+            saveData();
+            closeModal();
+            renderAccountsTable();
+        }
+
+        function deleteAccount(id) { if (confirm('Delete?')) { appData.accounts = appData.accounts.filter(x => x.id !== id);
+                saveData();
+                renderAccountsTable(); } }
+
+        function renderStaffTable() {
+            document.getElementById('staffTable').innerHTML = appData.staff.map(s => `
+            <tr><td>#ST${s.id}</td><td><strong>${s.name}</strong></td><td>${s.role}</td><td>${s.email}</td><td>${s.phone}</td><td>₹${s.salary.toLocaleString('en-IN')}</td><td><button class="btn btn-sm btn-outline" onclick="editStaff(${s.id})"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" onclick="deleteStaff(${s.id})"><i class="fas fa-trash"></i></button></td></tr>
+          `).join('') || '<tr><td colspan="7">No staff.</td></tr>';
+        }
+
+        function openStaffModal(id = null) {
+            const s = id ? appData.staff.find(x => x.id === id) : null;
+            document.getElementById('modalContainer').innerHTML = `
+            <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><h3>${s?'Edit':'Add'} Staff</h3>
+            <div class="form-grid"><div class="form-group"><label>Name</label><input id="stName" value="${s?s.name:''}"></div><div class="form-group"><label>Role</label><select id="stRole"><option value="Teacher" ${s&&s.role==='Teacher'?'selected':''}>Teacher</option><option value="Accountant" ${s&&s.role==='Accountant'?'selected':''}>Accountant</option><option value="Admin" ${s&&s.role==='Admin'?'selected':''}>Admin</option></select></div><div class="form-group"><label>Email</label><input type="email" id="stEmail" value="${s?s.email:''}"></div><div class="form-group"><label>Phone</label><input id="stPhone" value="${s?s.phone:''}"></div><div class="form-group"><label>Salary (₹)</label><input type="number" id="stSalary" value="${s?s.salary:''}"></div><div class="form-group"><label>Join Date</label><input type="date" id="stJoinDate" value="${s?s.joinDate:''}"></div></div>
+            <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveStaff(${s?s.id:'null'})">Save</button></div></div></div>`;
+        }
+
+        function saveStaff(id) {
+            const d = { name: document.getElementById('stName').value.trim(), role: document.getElementById('stRole').value,
+                email: document.getElementById('stEmail').value.trim(), phone: document.getElementById('stPhone').value
+                .trim(), salary: parseInt(document.getElementById('stSalary').value) || 0, joinDate: document.getElementById(
+                    'stJoinDate').value };
+            if (!d.name) { alert('Name required!'); return; }
+            if (id) { const i = appData.staff.findIndex(x => x.id === id); if (i >= 0) appData.staff[i] = { ...appData.staff[
+                        i], ...d }; } else { appData.staff.push({ id: getNextId(appData.staff), ...d }); }
+            saveData();
+            closeModal();
+            renderStaffTable();
+        }
+
+        function editStaff(id) { openStaffModal(id); }
+
+        function deleteStaff(id) { if (confirm('Delete?')) { appData.staff = appData.staff.filter(x => x.id !== id);
+                saveData();
+                renderStaffTable(); } }
+
+        function generateReport() {
+            const type = document.getElementById('reportType')?.value || 'students';
+            const from = document.getElementById('reportFrom')?.value;
+            const to = document.getElementById('reportTo')?.value;
+            let data = [],
+                headers = [];
+            switch (type) {
+                case 'students':
+                    headers = ['ID', 'Name', 'Email', 'Phone', 'Course', 'Admission Date', 'Status'];
+                    data = appData.students.map(s => ['#MT' + String(s.id).padStart(3, '0'), s.name, s.email, s.phone,
+                        getCourse(s.courseId).name || 'N/A', s.admissionDate, s.status
+                    ]);
+                    break;
+                case 'fees':
+                    headers = ['ID', 'Student', 'Total', 'Paid', 'Balance', 'Date', 'Receipt'];
+                    data = appData.fees.map(f => ['#F' + f.id, getStudent(f.studentId).name || 'N/A', f.totalAmount, f
+                        .paidAmount, f.balanceAmount, f.date, f.receiptNo
+                    ]);
+                    if (from) data = data.filter(d => d[5] >= from);
+                    if (to) data = data.filter(d => d[5] <= to);
+                    break;
+                case 'attendance':
+                    headers = ['ID', 'Student', 'Batch', 'Date', 'Status'];
+                    data = appData.attendance.map(a => ['#A' + a.id, getStudent(a.studentId).name || 'N/A', getBatch(a
+                        .batchId).name || 'N/A', a.date, a.status
+                    ]);
+                    if (from) data = data.filter(d => d[3] >= from);
+                    if (to) data = data.filter(d => d[3] <= to);
+                    break;
+                case 'exams':
+                    headers = ['ID', 'Exam', 'Course', 'Date', 'Max Marks'];
+                    data = appData.exams.map(e => ['#E' + e.id, e.name, getCourse(e.courseId).name || 'N/A', e.date, e
+                        .maxMarks
+                    ]);
+                    break;
+                case 'accounts':
+                    headers = ['ID', 'Type', 'Category', 'Amount', 'Date', 'Description'];
+                    data = appData.accounts.map(a => ['#AC' + a.id, a.type, a.category, a.amount, a.date, a.description]);
+                    if (from) data = data.filter(d => d[4] >= from);
+                    if (to) data = data.filter(d => d[4] <= to);
+                    break;
+            }
+            document.getElementById('reportTableHead').innerHTML = '<tr>' + headers.map(h => '<th>' + h + '</th>').join('') +
+                '</tr>';
+            document.getElementById('reportTableBody').innerHTML = data.map(r => '<tr>' + r.map(c => '<td>' + c + '</td>').join(
+                '') + '</tr>').join('') || '<tr><td colspan="' + headers.length + '">No data.</td></tr>';
+        }
+
+        function exportReport() {
+            let csv = '';
+            const table = document.querySelector('#reportTableContainer table');
+            if (!table) return;
+            table.querySelectorAll('tr').forEach(row => {
+                csv += Array.from(row.querySelectorAll('th,td')).map(c => '"' + c.textContent.replace(/"/g, '""') +
+                    '"').join(',') + '\n';
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'mastertech_report.csv';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
+
+        // Expose all functions globally
+        [
+            'openAdmissionModal',
+            'editAdmission',
+            'deleteAdmission',
+            'saveAdmission',
+            'openCourseModal',
+            'editCourse',
+            'deleteCourse',
+            'saveCourse',
+            'openBatchModal',
+            'editBatch',
+            'deleteBatch',
+            'saveBatch',
+            'switchCourseTab',
+            'openAttendanceModal',
+            'saveAttendance',
+            'deleteAttendance',
+            'openExamModal',
+            'saveExam',
+            'deleteExam',
+            'viewExamResults',
+            'addExamResult',
+            'saveExamResult',
+            'openCertificateModal',
+            'saveCertificate',
+            'deleteCertificate',
+            'printCertificate',
+            'openFeeModal',
+            'saveFee',
+            'deleteFee',
+            'printReceipt',
+            'updateFeeTotal',
+            'updateFeeBalance',
+            'openAccountModal',
+            'saveAccount',
+            'deleteAccount',
+            'openStaffModal',
+            'editStaff',
+            'deleteStaff',
+            'saveStaff',
+            'generateReport',
+            'exportReport',
+            'closeModal',
+            'renderAdmissionsTable',
+            'renderAttendanceTable',
+            'handleLogin',
+            'handleLogout',
+            'fillDemo',
+            'navigateTo'
+        ].forEach(fn => { window[fn] = eval(fn); });
+
+        function initApp() {
+            loadData();
+            navigateTo('dashboard');
+        }
+
+        // Initial state: show login
+        document.getElementById('userNameDisplay').textContent = 'Guest';
+        document.getElementById('userAvatar').textContent = '?';
+        loadData();
+        // Pre-render dashboard data for when user logs in
+        renderDashboard();
+        renderAdmissionsTable();
+        renderCoursesTable();
+        renderBatchesTable();
+        populateBatchDropdowns();
+        renderAttendanceTable();
+        renderExamsTable();
+        renderCertificatesTable();
+        renderFeesTable();
+        renderAccountsTable();
+        renderStaffTable();
+        generateReport();
+        // Navigate back to dashboard initially
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-dashboard').classList.add('active');
+
+        console.log('🚀 Master Tech - Computer Institute Management System Ready');
+        console.log('🔐 Login: admin/admin123 or teacher/admin123');
+        console.log('✨ Features: Animated UI | Dark/Light Mode | Charts | Receipts | CSV Export | 10 Modules');
+    </script>
+</body>
+</html>
